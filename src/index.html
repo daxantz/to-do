@@ -11,6 +11,7 @@
             <h1>Dax To Do</h1>
         </nav>
     </header>
+    
     <main id="container">
         <aside id="sidebar">
             <h2>home</h2>
@@ -32,9 +33,39 @@
         <div class="main-content">
             <div class="heading-container">
                 <h2>all tasks</h2>
-                <button class="add-task">Add Task</button>
             </div>
-            
+            <button class="add-task">Add Task</button>
+            <form>
+                <label>Title</label>
+                <input id="todo-title" type="text">
+                <label >Description</label>
+                <textarea id="todo-desc"></textarea>
+                <label>Date</label>
+                <input id="todo-date" type="date">
+                <div>
+                    <button class="addTodoBtn btn">Add</button>
+                    <button class="cancelTodoBtn btn">Cancel</button>
+                </div>
+            </form>
+
+            <div class="card-container">
+                <!-- <div class="card">
+                    <div class="task-and-content">
+                        <div class="task">
+                            <input type="checkbox">
+                            <span class="task-title">hey</span>
+                            <span class="task-date">yo</span>
+                        </div>
+                        <div class="content">
+                            <p class="title"><span>Title:</span>Title TExt</p>
+                            <p class="date"><span>date:</span>date info</p>
+                            <p class="desc">Description: <span></span></p>
+                            <p class="priority"><span>Title:</span>priority TExt</p>
+                        </div>
+                    </div>
+                </div> -->
+                
+            </div>
         </div>
     </main>
 
