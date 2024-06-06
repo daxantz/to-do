@@ -2,9 +2,9 @@ import  {Todo}  from "./to-do";
 import Project from "./projects";
 import "./style.css"
 import addTaskToPage from "./make-todo";
-import makeTodo from "./make-todo";
 import addCardToPage from "./add-card-to-page";
 import {makeCard} from "./make-task-card";
+import projectCreationForm from "./make-project-form";
 
 const todoTitleInput = document.querySelector("#todo-title");
 const todoDescInput = document.querySelector("#todo-desc");    
@@ -16,6 +16,7 @@ const addTaskBtn = document.querySelector(".addTodoBtn");
 const taskCards = document.querySelectorAll(".task-card");
 const card = document.querySelector(".task-card");
 const cardContent = document.querySelector(".task-and-content");
+const addProjectBtn = document.querySelector("#project-btn");
 addTaskBtn.addEventListener("click", (e) =>{
     e.preventDefault();
     const titleInputValue = todoTitleInput.value;
@@ -30,6 +31,10 @@ addTaskBtn.addEventListener("click", (e) =>{
 
     
     addCardToPage(taskCard); 
+})
+
+addProjectBtn.addEventListener("click", () =>{
+    projectCreationForm()
 })
 
 
