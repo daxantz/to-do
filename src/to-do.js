@@ -1,13 +1,15 @@
 
-
+import {Project} from "./projects";
 
 class Todo {
-    constructor(title, description, dueDate){
+    constructor(title, description, dueDate, project){
+        this.id = Date.now().toString();
         this.title = title;
         this.description = description;
         this.dueDate = dueDate;
         this.priority = 1;
         this.isComplete = false;
+        this.project = project
     }
 
     completeStatus(status) {
@@ -21,6 +23,14 @@ class Todo {
         
     }
 
+    addToProject(project){
+        if(project instanceof Project){
+            this.project = project;
+            project.addTodo(this);
+        }else {
+            console.log("this project doesnt exist");
+        }
+    }
 
     
 }
