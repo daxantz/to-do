@@ -1,28 +1,75 @@
 import { Projectlist } from "./projectList";
 import { Project } from "./projects";
 const list = new Projectlist();
+function renameProject(listElement, listItemName,projectOptions, project){
+    //div - renameConifm btn - cancelRename btn
+    const renameInput = document.createElement("input");
+    const buttonContainer = document.createElement("div");
+    const confirmRenameBtn = document.createElement("button");
+    const cancelRenameBtn = document.createElement("button");
+    confirmRenameBtn.innerText = "Confirm rename";
+    cancelRenameBtn.innerText = "Cancel Rename";
 
+    buttonContainer.classList.add("rename-btn-container");
+    confirmRenameBtn.classList.add("confirm-rename-btn");
+    cancelRenameBtn.classList.add("cancel-rename-btn");
+    buttonContainer.append(confirmRenameBtn, cancelRenameBtn);
+    listElement.append(renameInput, buttonContainer);
+
+    confirmRenameBtn.addEventListener("click" ,()=>{
+        project.editName(renameInput.value);
+        listItemName.innerText = renameInput.value;
+        renameInput.replaceWith(listItemName);
+        buttonContainer.replaceWith(projectOptions);
+        console.log("clicked confirm rename", list);
+    });
+
+    cancelRenameBtn.addEventListener("click", ()=>{
+        renameInput.replaceWith(listItemName);
+        buttonContainer.replaceWith(projectOptions);
+        
+        console.log("rename canceled");
+    })
+    
+    
+}
 function makeProjectListItem(project){
+    //elements
     const projectList = document.querySelector("#project-list");
     const listElement = document.createElement("li");
     const errorElement = document.createElement("span");
     const projectOptions = document.createElement("div");
     const renameProjectBtn = document.createElement("button");
     const deleteProjectBtn = document.createElement("button");
-    renameProjectBtn.innerText = "Rename";
-    deleteProjectBtn.innerText = "Delete";
+    const listItemName = document.createElement("p");
+
+
+    
+    //add classes to elements
     renameProjectBtn.classList.add("rename-project-btn");
     deleteProjectBtn.classList.add("delete-project-btn");
-    projectOptions.append(renameProjectBtn, deleteProjectBtn)
+    listItemName.classList.add("list-item-name");
+    listElement.classList.add("list-item");
+
+    
+    renameProjectBtn.innerText = "Rename";
+    deleteProjectBtn.innerText = "Delete";
     errorElement.innerText = "Project with this name already exists";
-    listElement.innerText = project.name;
-    listElement.appendChild(projectOptions);
+    listItemName.innerText = project.name
+    
+    projectOptions.append(renameProjectBtn, deleteProjectBtn);
+    listElement.append(listItemName, projectOptions);
     projectList.append(listElement);
 
 
     //event listeners to rename and delete projects
     renameProjectBtn.addEventListener("click", () =>{
-        //renders rename form
+        // const renameInput = document.createElement("input"); 
+        // listItemName.replaceWith(renameInput);
+        // project.editName(renameInput.value)
+        listElement.removeChild(projectOptions);
+        renameProject(listElement, listItemName,projectOptions, project);
+        
     })
 
     deleteProjectBtn.addEventListener("click", ()=>{
