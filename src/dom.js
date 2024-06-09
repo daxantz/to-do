@@ -1,6 +1,8 @@
 import { Projectlist } from "./projectList";
 import { Project } from "./projects";
+import { Todo } from "./to-do";
 const list = new Projectlist();
+const mainContainer = document.querySelector("#container")
 function renameProject(listElement, listItemName,projectOptions, project){
     //div - renameConifm btn - cancelRename btn
     const renameInput = document.createElement("input");
@@ -101,7 +103,7 @@ function addNewProject(nameValue){ //checks projectlist array to see if it exist
 }
 
 function makeProjectForm(){
-    const mainContainer = document.querySelector("#container")
+    
     const createProjectForm = document.createElement("dialog");
     
 
@@ -144,6 +146,106 @@ function showTaskForm(){
 
 }
 
+function makeTaskForm(){
+    //make form to take inputs for creating a task element/object
+    //form 
+    const form = document.createElement("dialog");
+    //labels
+    const titleLabel = document.createElement("label");
+    const descriptionLabel = document.createElement("label");
+    const dateLabel = document.createElement("label");
+    const projectLabel = document.createElement("label");
+    //inputs
+    const titleInput = document.createElement("input");
+    const descriptionInput = document.createElement("textarea");
+    const dateInput = document.createElement("input");
+    dateInput.type = "date";
+    const projectInput = document.createElement("input");
+    //buttons
+    const buttonContainer = document.createElement("div");
+    const addTaskBtn = document.createElement("button");
+    const cancelTaskBtn = document.createElement("button");
+    //element texts
+    titleLabel.innerText = "Title";
+    descriptionLabel.innerText = "Description";
+    dateLabel.innerText = "Date";
+    addTaskBtn.innerText = "Add";
+    cancelTaskBtn.innerText = "Cancel";
+    projectLabel.innerText = "Project";
+    //ids
+    titleInput.setAttribute("id", "todo-title");
+    descriptionInput.setAttribute("id", "todo-desc");
+    dateInput.setAttribute("id", "todo-date");
+    projectInput.setAttribute("id", "todo-project");
+
+    buttonContainer.append(addTaskBtn, cancelTaskBtn);
+    form.append(titleLabel, titleInput, descriptionLabel, descriptionInput, dateLabel, dateInput, projectLabel, projectInput, buttonContainer);
+    mainContainer.append(form);
+    form.showModal();
+
+    addTaskBtn.addEventListener("click", ()=>{
+        addNewTask(titleInput.value, descriptionInput.value, dateInput.value, projectInput.value);
+
+        form.close();
+    })
+
+    cancelTaskBtn.addEventListener("click", ()=>{
+        form.close();
+    })
+
+    buttonContainer.append(addTaskBtn, cancelTaskBtn);
 
 
-export {makeProjectForm, showTaskForm}
+}
+
+function addNewTask(title, description, date, projectName){
+    let project = list.projects.find(project => project.name === projectName);
+    project = list.getProject(projectName);
+    
+    if(project){
+        //create new task
+        const todo = new Todo(title, description, date);
+        //add task to project array
+        project.addTodo(todo);
+        console.log(`${todo.title} has been added to the ${project.name} task array`);
+        
+        
+        //make project todo element
+        makeTaskElement(todo);
+    } else {
+        console.error("The project you're attempting to add this task to doesnt exist");
+    }
+    
+}
+
+function makeTaskElement(todo){
+    const cardContainer = document.querySelector(".card-container");
+    const todoContainer = document.createElement("div");
+    const buttonContainer = document.createElement("div");
+    const todoTitle = document.createElement("p");
+    const todoDate = document.createElement("span");
+    const editTodoBtn = document.createElement("button");
+    const deleteTodoBtn = document.createElement("button");
+
+    todoTitle.innerText = todo.title;
+    todoDate.innerText = todo.dueDate;
+    editTodoBtn.innerText = "Edit";
+    deleteTodoBtn.innerText = "Delete";
+
+
+    buttonContainer.append(editTodoBtn, deleteTodoBtn);
+    todoContainer.append(todoTitle, todoDate, buttonContainer);
+    cardContainer.append(todoContainer);
+
+    editTodoBtn.addEventListener("click", ()=>{
+        //render form to edit details
+    });
+
+    deleteTodoBtn.addEventListener("click", ()=>{
+        //delete todo 
+    })
+}
+
+
+
+export {makeProjectForm, showTaskForm, addNewTask, makeTaskForm}
