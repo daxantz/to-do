@@ -194,6 +194,7 @@ function makeTaskForm(){
     addTaskBtn.addEventListener("click", ()=>{
         addNewTask(titleInput.value, descriptionInput.value, dateInput.value, projectInput.value);
         selectProject(projectInput.value);
+        
         form.close();
     })
 
@@ -226,7 +227,7 @@ function addNewTask(title, description, date, projectName){
     
 }
 
-function makeTaskElement(todo){
+function makeTaskElement(todo, projectName){
     
     const todoContainer = document.createElement("div");
     const buttonContainer = document.createElement("div");
@@ -247,10 +248,14 @@ function makeTaskElement(todo){
 
     editTodoBtn.addEventListener("click", ()=>{
         //render form to edit details
+        
     });
 
     deleteTodoBtn.addEventListener("click", ()=>{
-        //delete todo 
+        //delete todo
+        deleteTodoFromPage(todo, projectName)
+        todoContainer.remove();
+        
     })
 
     return todoContainer;
@@ -274,7 +279,7 @@ function addTodosToPage(project){
     if(project === selectedProject){
         let todos = project.getTodos();
         todos.forEach(item => {
-            const taskElement = makeTaskElement(item);
+            const taskElement = makeTaskElement(item, project.name);
             cardContainer.appendChild(taskElement);
         });
         
@@ -291,6 +296,12 @@ function selectProject(projectName){
     setPageHeading(selectedProject);
     addTodosToPage(selectedProject);
     
+}
+
+function deleteTodoFromPage(todo, projectName){
+    let project = list.getProject(projectName);
+    project.deleteTodo(todo);
+    console.log(project);
 }
 
 export {makeProjectForm, showTaskForm, addNewTask, makeTaskForm}
