@@ -163,12 +163,16 @@ function makeTaskForm(){
     const descriptionLabel = document.createElement("label");
     const dateLabel = document.createElement("label");
     const projectLabel = document.createElement("label");
+    const priorityLabel = document.createElement("label")
     //inputs
     const titleInput = document.createElement("input");
     const descriptionInput = document.createElement("textarea");
     const dateInput = document.createElement("input");
     dateInput.type = "date";
     const projectInput = document.createElement("input");
+    const priorityInput = document.createElement("input");
+    priorityInput.type = "number";
+
     //buttons
     const buttonContainer = document.createElement("div");
     const addTaskBtn = document.createElement("button");
@@ -180,6 +184,7 @@ function makeTaskForm(){
     addTaskBtn.innerText = "Add";
     cancelTaskBtn.innerText = "Cancel";
     projectLabel.innerText = "Project";
+    priorityLabel.innerText = "Priority"
     //ids
     titleInput.setAttribute("id", "todo-title");
     descriptionInput.setAttribute("id", "todo-desc");
@@ -187,12 +192,12 @@ function makeTaskForm(){
     projectInput.setAttribute("id", "todo-project");
 
     buttonContainer.append(addTaskBtn, cancelTaskBtn);
-    form.append(titleLabel, titleInput, descriptionLabel, descriptionInput, dateLabel, dateInput, projectLabel, projectInput, buttonContainer);
+    form.append(titleLabel, titleInput, descriptionLabel, descriptionInput, dateLabel, dateInput,priorityLabel, priorityInput, projectLabel, projectInput, buttonContainer);
     mainContainer.append(form);
     form.showModal();
 
     addTaskBtn.addEventListener("click", ()=>{
-        addNewTask(titleInput.value, descriptionInput.value, dateInput.value, projectInput.value);
+        addNewTask(titleInput.value, descriptionInput.value, dateInput.value,priorityInput.value, projectInput.value);
         selectProject(projectInput.value);
         
         form.close();
@@ -207,13 +212,13 @@ function makeTaskForm(){
 
 }
 
-function addNewTask(title, description, date, projectName){
+function addNewTask(title, description, date,priority, projectName){
     let project = list.projects.find(project => project.name === projectName);
     project = list.getProject(projectName);
     
     if(project){
         //create new task
-        const todo = new Todo(title, description, date);
+        const todo = new Todo(title, description, date, priority);
         //add task to project array
         project.addTodo(todo);
         console.log(`${todo.title} has been added to the ${project.name} task array`);
@@ -241,9 +246,21 @@ function makeTaskElement(todo, projectName){
     editTodoBtn.innerText = "Edit";
     deleteTodoBtn.innerText = "Delete";
 
+    
 
     buttonContainer.append(editTodoBtn, deleteTodoBtn);
     todoContainer.append(todoTitle, todoDate, buttonContainer);
+
+    
+    let title = todo.getTitle();
+    let desc = todo.getDescription();
+    let date = todo.getDate();
+    let priority = todo.getPriority();
+    let details = createTaskDetails(title, desc, date, priority);
+    details.classList.add("hidden");
+    todoContainer.append(details);
+        
+        
     // cardContainer.append(todoContainer);
 
     editTodoBtn.addEventListener("click", ()=>{
@@ -258,6 +275,9 @@ function makeTaskElement(todo, projectName){
         
     })
 
+    todoContainer.addEventListener("click", ()=>{
+        details.classList.toggle("hidden");
+    })
     return todoContainer;
 }
 
@@ -302,6 +322,26 @@ function deleteTodoFromPage(todo, projectName){
     let project = list.getProject(projectName);
     project.deleteTodo(todo);
     console.log(project);
+}
+
+function createTaskDetails(todoTitle, todoDesc, todoDate, todoPriority){
+    const projectDetails = document.createElement("div");
+    const titleText = document.createElement("p");
+    const descText = document.createElement("p");
+    const dateText = document.createElement("p");
+    const priorityText = document.createElement("p");
+
+    titleText.innerText = `Title: ${todoTitle}`;
+    descText.innerText = `Description: ${todoDesc}`;
+    dateText.innerText = `Date: ${todoDate}`;
+    priorityText.innerText = `Priority: ${todoPriority}`;
+
+    
+
+    projectDetails.classList.add("project-details");
+
+    projectDetails.append(titleText,descText, dateText, priorityText);
+    return projectDetails;
 }
 
 export {makeProjectForm, showTaskForm, addNewTask, makeTaskForm}
