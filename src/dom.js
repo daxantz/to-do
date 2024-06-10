@@ -2,7 +2,10 @@ import { Projectlist } from "./projectList";
 import { Project } from "./projects";
 import { Todo } from "./to-do";
 const list = new Projectlist();
-const mainContainer = document.querySelector("#container")
+const mainContainer = document.querySelector("#container");
+let selectedProject = null;
+const mainHeading = document.querySelector(".heading-text");
+const cardContainer = document.querySelector(".card-container");
 function renameProject(listElement, listItemName,projectOptions, project){
     //div - renameConifm btn - cancelRename btn
     const renameInput = document.createElement("input");
@@ -65,6 +68,11 @@ function makeProjectListItem(project){
 
 
     //event listeners to rename and delete projects
+
+    listElement.addEventListener("click", ()=>{
+        selectProject(project.name);
+        
+    })
     renameProjectBtn.addEventListener("click", () =>{
         // const renameInput = document.createElement("input"); 
         // listItemName.replaceWith(renameInput);
@@ -185,7 +193,7 @@ function makeTaskForm(){
 
     addTaskBtn.addEventListener("click", ()=>{
         addNewTask(titleInput.value, descriptionInput.value, dateInput.value, projectInput.value);
-
+        selectProject(projectInput.value);
         form.close();
     })
 
@@ -219,7 +227,7 @@ function addNewTask(title, description, date, projectName){
 }
 
 function makeTaskElement(todo){
-    const cardContainer = document.querySelector(".card-container");
+    
     const todoContainer = document.createElement("div");
     const buttonContainer = document.createElement("div");
     const todoTitle = document.createElement("p");
@@ -235,7 +243,7 @@ function makeTaskElement(todo){
 
     buttonContainer.append(editTodoBtn, deleteTodoBtn);
     todoContainer.append(todoTitle, todoDate, buttonContainer);
-    cardContainer.append(todoContainer);
+    // cardContainer.append(todoContainer);
 
     editTodoBtn.addEventListener("click", ()=>{
         //render form to edit details
@@ -244,8 +252,45 @@ function makeTaskElement(todo){
     deleteTodoBtn.addEventListener("click", ()=>{
         //delete todo 
     })
+
+    return todoContainer;
 }
 
+function setPageHeading(project){
+    if(project){
+        mainHeading.innerText = project.name;
+    } else {
+        console.error("Invalid project provided")
+    }
+    
+    
 
+    
+}
+
+function addTodosToPage(project){
+    cardContainer.innerHTML = "";
+
+    if(project === selectedProject){
+        let todos = project.getTodos();
+        todos.forEach(item => {
+            const taskElement = makeTaskElement(item);
+            cardContainer.appendChild(taskElement);
+        });
+        
+    }
+
+    
+
+        
+}
+
+function selectProject(projectName){
+
+    selectedProject = list.projects.find(project => project.name === projectName);
+    setPageHeading(selectedProject);
+    addTodosToPage(selectedProject);
+    
+}
 
 export {makeProjectForm, showTaskForm, addNewTask, makeTaskForm}
