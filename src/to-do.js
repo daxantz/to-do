@@ -2,14 +2,14 @@
 import {Project} from "./projects";
 
 class Todo {
-    constructor(title, description, dueDate, project){
+    constructor(title, description, dueDate, priority){
         this.id = Date.now().toString();
         this.title = title;
         this.description = description;
         this.dueDate = dueDate;
-        this.priority = 1;
+        this.priority = priority;
         this.isComplete = false;
-        this.project = project
+        
     }
 
     completeStatus(status) {
@@ -31,6 +31,20 @@ class Todo {
             console.log("this project doesnt exist");
         }
     }
+
+    editTodo(newName, newDescription, newDate, newPriority){
+        this.name = newName
+        this.description = newDescription;
+        this.dueDate = newDate;
+        
+        if(typeof newPriority === "number"){
+            this.priority = newPriority;
+        } else {
+            console.error("priority must be a number from 1-3");
+        }
+    }
+
+
 
     
 }
